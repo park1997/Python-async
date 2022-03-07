@@ -12,6 +12,7 @@ async def delivery(name, mealtime):
 
 async def main():
 
+    # 동시성으로 작동함
     result = await asyncio.gather(
         delivery("A", 5),
         delivery("B", 3),
@@ -20,14 +21,14 @@ async def main():
 
     print(result)
 
-    # 아래처럼 예약하고 할 수 있음
-    task1 = asyncio.create_task(delivery("A",5))
-    task2 = asyncio.create_task(delivery("B",3))
-    task3 = asyncio.create_task(delivery("C",4))
+    # 아래처럼 예약하고 할 수 있음(위에코드랑 똑같음)
+    # task1 = asyncio.create_task(delivery("A",5))
+    # task2 = asyncio.create_task(delivery("B",3))
+    # task3 = asyncio.create_task(delivery("C",4))
 
-    await task1
-    await task2
-    await task3
+    # await task1
+    # await task2
+    # await task3
 
 
 
