@@ -1,14 +1,30 @@
 import aiohttp
 import asyncio
 from config import get_secret
-
-# https://www.crummy.com/software/BeautifulSoup/bs4/doc/
-# pip install beautifulsoup4
+import os
+import aiofiles
+# pip install aiofiles==0.7.0
 
 """
 웹 크롤링 : 검색 엔진의 구축 등을 위하여 특정한 방법으로 웹 페이지를 수집하는 프로그램
 웹 스크래핑 : 웹에서 데이터를 수집하는 프로그램
 """
+
+async def img_downloader(session,img):
+    img_name = img.split("/")[-1].split("?")[0]
+    try:
+        # 이미 폴더가 존재하면 except로 간다
+        os.mkdir("./images")
+    except FileExistsError:
+        pass
+
+    async with session.get(img) as response:
+        # 200 : 파일을 여는데 성공한 경우
+        if response.status == 200:
+            async with aiofiles.open(f"./images/{img_name}",mode="wb") as file:
+                img_data = await response.read()
+                await file.write(img_data)
+
 
 
 async def fetch(session, url, i):
@@ -27,7 +43,11 @@ async def fetch(session, url, i):
         # print(result)
         
         # cat 이미지들이 담기게 됨
-        print(images)
+        # print(images)
+
+        # 이미지 다운로드
+        await asyncio.gather(*[img_downloader(session,img_src) for img_src in images])
+
 
 
 async def main():
