@@ -23,4 +23,4 @@ if __name__ =="__main__":
     start = time.time()
     main()
     end = time.time()
-    print(end-start)
+    print(end-start) # 동기식 프로그래밍 => 14초 소요
